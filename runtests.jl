@@ -25,7 +25,6 @@ function test_least_square()
 		 1.29  0.12  0.62];
 	m, n = size(A)
 	b = 1e3 * ones(m);
-
 	xhat = solve_least_square(A, b)
 	# println(xhat)
 
