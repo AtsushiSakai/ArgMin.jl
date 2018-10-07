@@ -46,6 +46,17 @@ function test_multi_objective_least_square()
 	@test xhat[1] ≈ 0.405977 atol=0.01
 end
 
+
+function test_solve_constrained_least_square()
+	println("test_solve_constrained_least_square")
+	A = randn(10,5)
+	b = randn(10)
+	C = randn(2,5)
+	d = randn(2)
+	xhat = solve_constrained_least_square(A,b,C,d);
+end
+
 test_least_square()
 test_multi_objective_least_square()
+test_solve_constrained_least_square()
 

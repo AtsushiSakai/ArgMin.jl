@@ -8,6 +8,7 @@ module argmin
 
 export solve_least_square
 export solve_multi_objective_least_square
+export solve_constrained_least_square
 
 """
 	solve least square
@@ -32,6 +33,21 @@ function solve_multi_objective_least_square(As, bs, lambdas)
    Atil = vcat([sqrt(lambdas[i])*As[i] for i=1:k]...)
    btil = vcat([sqrt(lambdas[i])*bs[i] for i=1:k]...)
    return solve_least_square(Atil, btil)
+end
+
+"""
+	solve constrained least_square
+
+	xhat = argmin(|Ax = b|^2) s.t. Cx = d
+
+"""
+function solve_constrained_least_square(A,b,C,d)
+	m, n = size(A)
+    p, n = size(C)
+    G = A'*A  # Gram matrix
+    KKT = [2*G C'; C zeros(p,p)]  # KKT matrix
+    xzhat = KKT \ [2*A'*b; d]
+    return xzhat[1:n,:]
 end
 
 end #module
