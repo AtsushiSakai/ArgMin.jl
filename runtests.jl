@@ -33,5 +33,15 @@ function test_least_square()
 	@test xhat[3] ≈ 1442.84 atol=0.01
 end
 
+function test_multi_objective_least_square()
+	As = [randn(10,5), randn(10,5)];
+	bs = [randn(10), randn(10)];
+	lambdas = [0.1, 1.0]
+
+	xhat = solve_multi_objective_least_square(As, bs, lambdas)
+	println(xhat)
+end
+
 test_least_square()
+test_multi_objective_least_square()
 
