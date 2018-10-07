@@ -34,12 +34,16 @@ function test_least_square()
 end
 
 function test_multi_objective_least_square()
-	As = [randn(10,5), randn(10,5)];
-	bs = [randn(10), randn(10)];
+	println("test_multi_objective_least_square")
+	As = [[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+   		  [9.0, 2.0, 1.0, 4.0, 3.0, 1.6, 1.0, 2.0, -9.5, -19.0]];
+	bs = [[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0],
+   		  [5.0, 2.0, 8.0, -4.0, 1.0, 0.6, 17.0, 21.0, -9.0, -1.0]];
 	lambdas = [0.1, 1.0]
 
 	xhat = solve_multi_objective_least_square(As, bs, lambdas)
-	println(xhat)
+
+	@test xhat[1] ≈ 0.405977 atol=0.01
 end
 
 test_least_square()
