@@ -56,7 +56,20 @@ function test_solve_constrained_least_square()
 	xhat = solve_constrained_least_square(A,b,C,d);
 end
 
+
+function test_solve_nonlinear_least_square_with_newton_raphson()
+	println("test_solve_nonlinear_least_square_with_newton_raphson")
+
+	f(x) = (exp(x)-exp(-x)) / (exp(x)+exp(-x))
+	Df(x) = 4.0 / (exp(x) + exp(-x))^2;
+
+	xhat = solve_nonlinear_least_square_with_newton_raphson(f,Df,0.95)
+	# println(xhat)
+	# println(f(xhat))
+end
+
 test_least_square()
 test_multi_objective_least_square()
 test_solve_constrained_least_square()
+test_solve_nonlinear_least_square_with_newton_raphson()
 

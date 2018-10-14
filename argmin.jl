@@ -9,6 +9,7 @@ module argmin
 export solve_least_square
 export solve_multi_objective_least_square
 export solve_constrained_least_square
+export solve_nonlinear_least_square_with_newton_raphson
 
 """
 	solve least square
@@ -37,9 +38,7 @@ end
 
 """
 	solve constrained least_square
-
 	xhat = argmin(|Ax = b|^2) s.t. Cx = d
-
 """
 function solve_constrained_least_square(A,b,C,d)
 	m, n = size(A)
@@ -49,6 +48,31 @@ function solve_constrained_least_square(A,b,C,d)
     xzhat = KKT \ [2*A'*b; d]
     return xzhat[1:n,:]
 end
+
+
+"""
+	solve nonlinear least square with newton-raphson method
+
+	The inputs have to be length(x) == length(f(x))
+
+	xhat = argmin(|f(x)|^2)
+"""
+function solve_nonlinear_least_square_with_newton_raphson(
+		f, Df, x1; kmax = 20, tol = 1e-6)
+
+	x=x1
+	@assert length(x) == length(f(x))
+	for k = 1:kmax
+		fk = f(x)
+		dx = Df(x) \ fk
+		if norm(dx) < tol break end;
+		x = x - dx
+	end
+
+	return x
+end
+
+
 
 end #module
 
