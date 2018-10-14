@@ -68,8 +68,20 @@ function test_solve_nonlinear_least_square_with_newton_raphson()
 	# println(f(xhat))
 end
 
+
+function test_solve_nonlinear_least_square_with_gauss_newton()
+	println("test_solve_nonlinear_least_square_with_gauss_newton")
+
+	f(x) = (exp.(x) - exp.(-x)) / (exp.(x) + exp.(-x))
+	Df(x) = 4 ./ (exp.(x) + exp.(-x)).^2
+	xhat = solve_nonlinear_least_square_with_gauss_newton(f,Df,[0.95 1.15]')
+end
+
+
+
 test_least_square()
 test_multi_objective_least_square()
 test_solve_constrained_least_square()
 test_solve_nonlinear_least_square_with_newton_raphson()
+test_solve_nonlinear_least_square_with_gauss_newton()
 

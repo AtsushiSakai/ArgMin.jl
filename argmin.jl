@@ -10,6 +10,7 @@ export solve_least_square
 export solve_multi_objective_least_square
 export solve_constrained_least_square
 export solve_nonlinear_least_square_with_newton_raphson
+export solve_nonlinear_least_square_with_gauss_newton
 
 """
 	solve least square
@@ -53,7 +54,8 @@ end
 """
 	solve nonlinear least square with newton-raphson method
 
-	The inputs have to be length(x) == length(f(x))
+	The inputs have to be length(x) == length(f(x)).
+	If it is not, you cant use solve_nonlinear_least_square_with_gauss_newton
 
 	xhat = argmin(|f(x)|^2)
 """
@@ -72,7 +74,24 @@ function solve_nonlinear_least_square_with_newton_raphson(
 	return x
 end
 
+"""
+	solve nonlinear least square with gauss-newton method
 
+	xhat = argmin(|f(x)|^2)
+"""
+function solve_nonlinear_least_square_with_gauss_newton(
+		f, Df, x1; kmax = 20, tol = 1e-6)
+	x=x1
+	for k=1:kmax
+		fk = f(x)
+		dfx = Df(x)
+		dx = inv(dfx'*dfx)*dfx'*fk
+		if norm(dx) < tol break end;
+		x = x - dx'
+	end
+
+	return x
+end
 
 end #module
 
