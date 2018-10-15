@@ -7,7 +7,7 @@ Mathematical equations are rendered by [Online LaTeX Equation Editor](https://ww
 
 # API
 
-## solve least square
+## solve_least_square
 
 <img src="https://latex.codecogs.com/gif.latex?\hat{x}=argmin(|Ax-b|^2)" />
 
@@ -18,6 +18,14 @@ Mathematical equations are rendered by [Online LaTeX Equation Editor](https://ww
 ## solve_constrained_least_square
 
 <img src="https://latex.codecogs.com/gif.latex?\hat{x}=argmin(|Ax&space;=&space;b|^2)\&space;s.t.\&space;Cx&space;=&space;d" title="\hat{x}=argmin(|Ax = b|^2)\ s.t.\ Cx = d" />
+
+## solve_nonlinear_least_square_with_newton_raphson
+
+<img src="https://latex.codecogs.com/gif.latex?\hat{x}&space;=&space;argmin(|f(x)|^2)" title="\hat{x} = argmin(||f(x)||^2)" />
+
+## solve_nonlinear_least_square_with_gauss_newton
+
+<img src="https://latex.codecogs.com/gif.latex?\hat{x}&space;=&space;argmin(|f(x)|^2)" title="\hat{x} = argmin(||f(x)||^2)" />
 
 # License
 
