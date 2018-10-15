@@ -86,6 +86,7 @@ function solve_nonlinear_least_square_with_gauss_newton(
 		fk = f(x)
 		dfx = Df(x)
 		dx = inv(dfx'*dfx)*dfx'*fk
+		dx = (dfx'*dfx) \ (dfx'*fk)
 		if norm(dx) < tol break end;
 		x = x - dx'
 	end
