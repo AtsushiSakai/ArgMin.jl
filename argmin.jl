@@ -66,7 +66,7 @@ function solve_nonlinear_least_square_with_newton_raphson(
 	@assert length(x) == length(f(x))
 	for k = 1:kmax
 		fk = f(x)
-		dx = Df(x) \ fk
+		dx = fk / Df(x)
 		if norm(dx) < tol break end;
 		x = x - dx
 	end
