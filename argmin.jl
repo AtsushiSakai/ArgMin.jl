@@ -11,6 +11,7 @@ export solve_multi_objective_least_square
 export solve_constrained_least_square
 export solve_nonlinear_least_square_with_newton_raphson
 export solve_nonlinear_least_square_with_gauss_newton
+export solve_nonlinear_least_square_with_levenberg_marquardt
 
 """
 	solve least square
@@ -80,18 +81,67 @@ end
 	xhat = argmin(|f(x)|^2)
 """
 function solve_nonlinear_least_square_with_gauss_newton(
-		f, Df, x1; kmax = 20, tol = 1e-6)
-	x=x1
+		f, Df, x0;
+	   	kmax = 20, tol = 1e-6)
+	x=x0
+   	obj = zeros(0,1)
+   	residuals = zeros(0,1)
 	for k=1:kmax
-		fk = f(x)
+		fx = f(x)
 		dfx = Df(x)
-		dx = (dfx'*dfx) \ (dfx'*fk)
-		if norm(dx) < tol break end;
+		obj = [obj; norm(fx)^2]
+		res = norm(2*dfx'*fx)
+		residuals = [residuals; res]
+		if res < tol break end;
+		dx = (dfx'*dfx) \ (dfx'*fx)
 		x = x - dx'
 	end
 
-	return x
+	return x, Dict([ ("objectives", obj), ("residuals", residuals)])
 end
+
+
+"""
+	solve nonlinear least square with levenberg marquardt
+
+	xhat = argmin(|f(x)|^2)
+"""
+function solve_nonlinear_least_square_with_levenberg_marquardt(
+		f, Df, x0, lambda0;
+	   	kmax = 20, tol = 1e-6, lamr_n = 0.8, lamr_p = 2.0)
+
+	n = length(x0)
+	x=x0
+	lambda = lambda0
+	obj = zeros(0,1)
+	residuals = zeros(0,1)
+	xhist = x0'
+	for k = 1:kmax
+		fx = f(x)
+		Dfk = Df(x)
+		obj = [obj; norm(fx)^2]
+		res = norm(2*Dfk'*fx)
+		residuals = [residuals; res]
+		if res < tol break end;
+		tmp = Dfk'*fx
+		if isa(tmp, Array)
+			dx = (Dfk'*Dfk+lambda*eye(n)) \ tmp
+		else
+			dx = (Dfk'*Dfk+lambda*eye(n)) \ [tmp]
+		end
+		xt = x - dx
+		if norm(f(xt)) < norm(fx)
+			lambda = lamr_n*lambda
+			x = xt
+		else
+			lambda = lamr_p*lambda
+		end
+		xhist = [xhist; x']
+	end
+
+	return x, Dict([ ("objectives", obj), ("residuals", residuals), ("x_history", xhist)])
+end
+
 
 end #module
 

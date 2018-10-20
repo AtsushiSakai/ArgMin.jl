@@ -64,24 +64,27 @@ function test_solve_nonlinear_least_square_with_newton_raphson()
 	Df(x) = 4.0 / (exp(x) + exp(-x))^2;
 
 	xhat = solve_nonlinear_least_square_with_newton_raphson(f,Df,0.95)
-	# println(xhat)
-	# println(f(xhat))
 end
 
 
 function test_solve_nonlinear_least_square_with_gauss_newton()
 	println("test_solve_nonlinear_least_square_with_gauss_newton")
-
 	f(x) = (exp.(x) - exp.(-x)) / (exp.(x) + exp.(-x))
 	Df(x) = 4 ./ (exp.(x) + exp.(-x)).^2
 	xhat = solve_nonlinear_least_square_with_gauss_newton(f,Df,[0.95 1.15]')
 end
 
-
+function test_solve_nonlinear_least_square_with_levenberg_marquardt()
+	println("test_solve_nonlinear_least_square_with_levenberg_marquardt")
+	f(x) = (exp.(x) - exp.(-x)) ./ (exp.(x) + exp.(-x))
+	Df(x) = 4.0 ./ (exp.(x) + exp.(-x)).^2
+	xhat = solve_nonlinear_least_square_with_levenberg_marquardt(f,Df,[0.95], 1.0)
+end
 
 test_least_square()
 test_multi_objective_least_square()
 test_solve_constrained_least_square()
 test_solve_nonlinear_least_square_with_newton_raphson()
 test_solve_nonlinear_least_square_with_gauss_newton()
+test_solve_nonlinear_least_square_with_levenberg_marquardt()
 
