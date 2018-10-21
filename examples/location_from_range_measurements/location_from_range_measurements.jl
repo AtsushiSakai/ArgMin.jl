@@ -8,7 +8,7 @@ using Base.Test
 using PyPlot
 const __MAIN__ = length(PROGRAM_FILE)!=0 && contains(@__FILE__, PROGRAM_FILE)
 
-include("../argmin.jl")
+include("../../argmin.jl")
 using argmin
 
 function main()
