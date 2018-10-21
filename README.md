@@ -27,6 +27,10 @@ Mathematical equations are rendered by [Online LaTeX Equation Editor](https://ww
 
 <img src="https://latex.codecogs.com/gif.latex?\hat{x}&space;=&space;argmin(|f(x)|^2)" title="\hat{x} = argmin(||f(x)||^2)" />
 
+## solve_nonlinear_least_square_with_levenberg_marquardt
+
+<img src="https://latex.codecogs.com/gif.latex?\hat{x}&space;=&space;argmin(|f(x)|^2)" title="\hat{x} = argmin(||f(x)||^2)" />
+
 # License
 
 MIT
