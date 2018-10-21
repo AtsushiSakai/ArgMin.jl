@@ -93,8 +93,15 @@ function solve_nonlinear_least_square_with_gauss_newton(
 		res = norm(2*dfx'*fx)
 		residuals = [residuals; res]
 		if res < tol break end;
-		dx = (dfx'*dfx) \ (dfx'*fx)
-		x = x - dx'
+
+		tmp = (dfx'*fx)
+		if isa(tmp, Array)
+			dx = (dfx'*dfx) \ tmp
+		else
+			dx = (dfx'*dfx) \ [tmp]
+		end
+
+		x = x - dx
 	end
 
 	return x, Dict([ ("objectives", obj), ("residuals", residuals)])

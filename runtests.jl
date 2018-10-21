@@ -69,9 +69,9 @@ end
 
 function test_solve_nonlinear_least_square_with_gauss_newton()
 	println("test_solve_nonlinear_least_square_with_gauss_newton")
-	f(x) = (exp.(x) - exp.(-x)) / (exp.(x) + exp.(-x))
+	f(x) = (exp.(x) - exp.(-x)) ./ (exp.(x) + exp.(-x))
 	Df(x) = 4 ./ (exp.(x) + exp.(-x)).^2
-	xhat = solve_nonlinear_least_square_with_gauss_newton(f,Df,[0.95 1.15]')
+	xhat = solve_nonlinear_least_square_with_gauss_newton(f,Df,[1.15])
 end
 
 function test_solve_nonlinear_least_square_with_levenberg_marquardt()
