@@ -31,6 +31,10 @@ Mathematical equations are rendered by [Online LaTeX Equation Editor](https://ww
 
 <img src="https://latex.codecogs.com/gif.latex?\hat{x}&space;=&space;argmin(|f(x)|^2)" title="\hat{x} = argmin(||f(x)||^2)" />
 
+## solve_constrained_nonlinear_least_square_with_augmented_lagragian
+
+<img src="https://latex.codecogs.com/gif.latex?\hat{x}&space;=&space;argmin(||f(x)||^2)\&space;s.t.\&space;g(x)=0" title="\hat{x} = argmin(||f(x)||^2)\ s.t.\ g(x)=0" />
+
 # License
 
 MIT

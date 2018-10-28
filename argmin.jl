@@ -12,6 +12,7 @@ export solve_constrained_least_square
 export solve_nonlinear_least_square_with_newton_raphson
 export solve_nonlinear_least_square_with_gauss_newton
 export solve_nonlinear_least_square_with_levenberg_marquardt
+export solve_constrained_nonlinear_least_square_with_augmented_lagragian
 
 """
 	solve least square
@@ -149,7 +150,41 @@ function solve_nonlinear_least_square_with_levenberg_marquardt(
 	return x, Dict([ ("objectives", obj), ("residuals", residuals), ("x_history", xhist)])
 end
 
+"""
+Solve constrained nonlinear least square with augmentedl lagrangian method
 
+xhat = argmin(|f(x)|^2) s.t g(x) = 0
+
+"""
+function solve_constrained_nonlinear_least_square_with_augmented_lagragian(
+		f, Df, g, Dg, x1, lambda1;
+	   	kmax = 100, feas_tol = 1e-4, oc_tol = 1e-4)
+	x=x1
+	z = zeros(length(g(x)))
+	mu=1.0
+	feas_res = [norm(g(x))]
+	oc_res = [norm(2*Df(x)'*f(x) + 2*mu*Dg(x)'*z)]
+	lm_iters = zeros(Int64,0,1)
+
+	for k=1:kmax
+		F(x) = [f(x); sqrt(mu)*(g(x) + z/(2*mu))]
+		DF(x) = [Df(x); sqrt(mu)*Dg(x)]
+		x, hist = solve_nonlinear_least_square_with_levenberg_marquardt(F, DF, x, lambda1, tol=oc_tol)
+        z = z + 2*mu*g(x)
+        feas_res = [feas_res; norm(g(x))]
+        oc_res = [oc_res; hist["residuals"][end]]
+        lm_iters = [lm_iters; length(hist["residuals"])]
+        if norm(g(x)) < feas_tol
+			break
+		end
+        mu = (norm(g(x)) < 0.25*feas_res[end-1]) ? mu : 2*mu
+    end
+
+    return x, z, Dict([ ("lm_iterations", lm_iters),
+         ("feas_res", feas_res), ("oc_res", oc_res)])
+end
+
+ 
 end #module
 
 

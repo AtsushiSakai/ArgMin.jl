@@ -81,10 +81,22 @@ function test_solve_nonlinear_least_square_with_levenberg_marquardt()
 	xhat = solve_nonlinear_least_square_with_levenberg_marquardt(f,Df,[0.95], 1.0)
 end
 
+function test_solve_constrained_nonlinear_least_square_with_augmented_lagragian()
+	println("test_solve_constrained_nonlinear_least_square_with_augmented_lagragian")
+	f(x) = [ x[1] + exp(-x[2]), x[1]^2 + 2*x[2] + 1 ]
+	Df(x) = [ 1.0 -exp(-x[2]);
+  			2*x[1]  2 ]
+	g(x) = [ x[1] + x[1]^3 + x[2] + x[2]^2 ]
+	Dg(x) = [ 1 + 3*x[1]^2  1 + 2*x[2] ]
+	x, z, hist = solve_constrained_nonlinear_least_square_with_augmented_lagragian(f, Df, g, Dg, [0.5, -0.5], 1.0)
+end
+
+
 test_least_square()
 test_multi_objective_least_square()
 test_solve_constrained_least_square()
 test_solve_nonlinear_least_square_with_newton_raphson()
 test_solve_nonlinear_least_square_with_gauss_newton()
 test_solve_nonlinear_least_square_with_levenberg_marquardt()
+test_solve_constrained_nonlinear_least_square_with_augmented_lagragian()
 
