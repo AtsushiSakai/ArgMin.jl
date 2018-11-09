@@ -6,6 +6,8 @@
 
 module argmin
 
+using LinearAlgebra
+
 export solve_least_square
 export solve_multi_objective_least_square
 export solve_constrained_least_square
@@ -13,6 +15,9 @@ export solve_nonlinear_least_square_with_newton_raphson
 export solve_nonlinear_least_square_with_gauss_newton
 export solve_nonlinear_least_square_with_levenberg_marquardt
 export solve_constrained_nonlinear_least_square_with_augmented_lagragian
+
+eye(T::Type, n) = Diagonal{T}(I, n)
+eye(n) = eye(Float64, n)
 
 """
 	solve least square
@@ -135,7 +140,8 @@ function solve_nonlinear_least_square_with_levenberg_marquardt(
 		if isa(tmp, Array)
 			dx = (Dfk'*Dfk+lambda*eye(n)) \ tmp
 		else
-			dx = (Dfk'*Dfk+lambda*eye(n)) \ [tmp]
+			# dx = (Dfk'*Dfk+lambda*eye(n)) \ [tmp]
+			dx = (Dfk'*Dfk+lambda*1.0) \ [tmp]
 		end
 		xt = x - dx
 		if norm(f(xt)) < norm(fx)
