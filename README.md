@@ -37,6 +37,10 @@ Mathematical equations are rendered by [Online LaTeX Equation Editor](https://ww
 
 ## solve_quadratic_programing
 
+<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{x}&space;=&space;argmin(\frac{1}{2}xPx&plus;q'x)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{x}&space;=&space;argmin(\frac{1}{2}xPx&plus;q'x)" title="\hat{x} = argmin(\frac{1}{2}xPx+q'x)" /></a>
+
+or
+
 <a href="https://www.codecogs.com/eqnedit.php?latex=\hat{x}&space;=&space;argmin(\frac{1}{2}xPx&plus;q'x)\&space;s.t.\&space;Ax=b" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{x}&space;=&space;argmin(\frac{1}{2}xPx&plus;q'x)\&space;s.t.\&space;Ax=b" title="\hat{x} = argmin(\frac{1}{2}xPx+q'x)\ s.t.\ Ax=b" /></a>
 
 
