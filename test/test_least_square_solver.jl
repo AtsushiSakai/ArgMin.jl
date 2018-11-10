@@ -48,7 +48,7 @@ function test_solve_constrained_least_square()
 	b = randn(10)
 	C = randn(2,5)
 	d = randn(2)
-	xhat = argmin.solve_constrained_least_square(A,b,C,d);
+	xhat = argmin.solve_least_square(A,b,C,d);
 end
 
 
