@@ -1,5 +1,5 @@
 #
-# 
+# Convex optimization solver
 #
 # author: Atsushi Sakai
 #
@@ -8,6 +8,21 @@ using Test
 const __MAIN__ = length(PROGRAM_FILE)!=0 && occursin(PROGRAM_FILE, @__FILE__)
 
 export solve_quadratic_programming
+export solve_linear_programming_with_simplex_method
+
+
+function solve_linear_programming_with_simplex_method(c, A, b)
+	"""
+	solve linear programming with simplex method
+          x = argmin(c.T*x) s.t Ax <= b, x>=0
+	"""
+
+	x_hat = nothing
+
+	return x_hat
+end
+
+
 
 function solve_quadratic_programming(P, q)
 	"""
@@ -40,8 +55,5 @@ function solve_quadratic_programming(P, q, A, b)
 
 	return x_hat[1:2,:]
 end
-
-
-
 
 
