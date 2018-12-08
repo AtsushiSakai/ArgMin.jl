@@ -11,16 +11,29 @@ export solve_quadratic_programming
 export solve_linear_programming_with_simplex_method
 
 
-function solve_linear_programming_with_simplex_method(c, A, b)
+function solve_linear_programming_with_simplex_method(c;
+	   	G=nothing, h=nothing, A=nothing, b=nothing)
 	"""
+
 	solve linear programming with simplex method
-          x = argmin(c.T*x) s.t Ax <= b, x>=0
+          x = argmin(c.T*x) s.t Gx <= h, Ax = b x>=0
+
 	"""
 	nx = length(c)
-	n, m = size(A)
+	n, m = size(G)
 
-	a = vcat(hcat(A, Diagonal{Float64}(I,n), b),
+    if A == nothing || b == nothing
+	    a = vcat(hcat(G, Diagonal{Float64}(I,n), h),
 			  hcat(-c', zeros(1, n+1)))
+    else
+        GA = vcat(G,A,-A)
+        hb = vcat(h,b,-b)
+        n += 2*size(A)[1]
+	    a = vcat(hcat(GA, Diagonal{Float64}(I,n), hb),
+			     hcat(-c', zeros(1, n+1)))
+        display(a)
+    end
+
 	nr, nc = size(a)
 	x=y=1
 
@@ -71,7 +84,7 @@ function solve_linear_programming_with_simplex_method(c, A, b)
 	end
 	obj = a[nr, nc]
 	# println(obj)
-	# println(x_hat)
+    println(x_hat)
 
 	return x_hat, Dict([ ("objectives", obj)])
 
