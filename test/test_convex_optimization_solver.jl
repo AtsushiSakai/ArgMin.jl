@@ -122,9 +122,9 @@ function test_solve_quadratic_programming2()
 	@test x_hat[2] ≈ 0.0 atol=0.01
 end
 
-test_solve_linear_programming_with_simplex_method1()
-test_solve_linear_programming_with_simplex_method2()
-test_solve_linear_programming_with_simplex_method3()
+# test_solve_linear_programming_with_simplex_method1()
+# test_solve_linear_programming_with_simplex_method2()
+# test_solve_linear_programming_with_simplex_method3()
 test_solve_quadratic_programming1()
 test_solve_quadratic_programming2()
 

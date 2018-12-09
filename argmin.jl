@@ -10,6 +10,7 @@ using LinearAlgebra
 
 include("src/least_square_solver.jl")
 include("src/convex_optimization_solver.jl")
+include("src/projected_newton_qp_solver.jl")
  
 end #module
 

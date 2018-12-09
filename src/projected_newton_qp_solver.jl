@@ -4,14 +4,16 @@
  author: Atsushi Sakai
 
  Ref:
-    - [Control-limited differential dynamic programming - Semantic Scholar](https://www.semanticscholar.org/paper/Control-limited-differential-dynamic-programming-Tassa-Mansard/45fd8d3745b20349ef763c80bf01ced802eaf75a)
+
+ - [Control-limited differential dynamic programming](https://homes.cs.washington.edu/~todorov/papers/TassaICRA14.pdf)
 
 "
 
-using Test
 using Statistics
 using LinearAlgebra
 const __MAIN__ = length(PROGRAM_FILE)!=0 && occursin(PROGRAM_FILE, @__FILE__)
+
+export solve_qp_with_projected_newton
 
 function solve_qp_with_projected_newton(H, g, lower, upper;
            maxIter = 100, minGrad = 1e-8, minRelImprove = 1e-8,
@@ -34,33 +36,28 @@ function solve_qp_with_projected_newton(H, g, lower, upper;
             minRelImprove  = 1e-8      minimum relative improvement
             stepDec        = 0.6      factor for decreasing stepsize
             minStep        = 1e-22    minimal stepsize for linesearch
-            Armijo         = 0.1      Armijo parameter (fraction of linear improvement required)
+            Armijo         = 0.1      Armijo parameter
 	        verbose        = false    verbosity
-
 
         outputs:
             xstar    - solution            (n)
-            result       - result type (roughly, higher is better, see below)
-            Hfree        - subspace cholesky factor   (n_free * n_free)
-            free         - set of free dimensions     (n)
+            status   - status dictionary
     """
 
     n        = size(H,1)
     clamped  = falses(n,1)
     free     = trues(n,1)
-    oldvalue = [0.0]
-    result   = 0
-    gnorm    = 0
+    oldvalue = 0.0
+    result   = -10 
+    gnorm    = 0.0
     nfactor  = 0
-    trace    = Float64[]
     Hfree    = zeros(n)
 
     # initialize state
     LU = [lower upper]
-    # println(LU)
-    # LU(~isfinite(LU)) = nan;
-    x = mean(LU, dims=2)
-    # x(~isfinite(x)) = 0;
+    x = vec(mean(LU, dims=2))
+    x[x.==-Inf].=0
+    x[x.== Inf].=0
 
     # initial objective value
     value    = x'*g + 0.5*x'*H*x
@@ -74,10 +71,8 @@ function solve_qp_with_projected_newton(H, g, lower, upper;
     for iter = 1:maxIter
         niter = iter
     
-        if result != 0 break;end #stop loop
-    
         # check relative improvement
-        if( iter>1 && (oldvalue[1] - value[1]) < minRelImprove*abs(oldvalue[1]) )
+        if( iter>1 && (oldvalue - value) < minRelImprove*abs(oldvalue) )
             result = 4
             break
         end
@@ -108,8 +103,8 @@ function solve_qp_with_projected_newton(H, g, lower, upper;
         f_ind = [i for i in 1:length(free) if free[i]]
     
         if factorize
-            Hfree = LinearAlgebra.cholesky(H[f_ind,f_ind])
-            Hfree = Hfree.U
+            cH = LinearAlgebra.cholesky(H[f_ind,f_ind])
+            Hfree = cH.U
             nfactor += 1
         end
     
@@ -128,29 +123,30 @@ function solve_qp_with_projected_newton(H, g, lower, upper;
         # check for descent direction
         sdotg = sum(search.*grad)
         if sdotg >= 0 # (should not happen)
+            result = 0
             break
         end
     
         # armijo linesearch
-        step  = 1
+        step  = 1.0
         nstep = 0
-	    xc    = clamp(x+step*search, upper, lower)
+	    xc    = clamping(x+step*search, upper, lower)
         vc    = xc'*g + 0.5*xc'*H*xc
 
-        while ((vc - oldvalue)/(step*sdotg))[1] < Armijo
+        while ((vc - oldvalue)/(step*sdotg)) < Armijo
             step  *= stepDec
             nstep += 1
-            xc    = clamp(x+step*search, upper, lower)
+            xc    = clamping(x+step*search, upper, lower)
             vc    = xc'*g + 0.5*xc'*H*xc
             if step<minStep
-                result = 2
                 break
             end
         end
     
         if verbose
             println("iter:",iter," value:", vc[1], " |g|:", gnorm, 
-                    " reduction:", (oldvalue-vc)[1], " linesearch:", stepDec, " n_clamped", nstep, sum(clamped))
+                    " reduction:", (oldvalue-vc)[1], " linesearch:",
+                    stepDec, " n_clamped", nstep, sum(clamped))
         end
     
         # accept candidate
@@ -162,27 +158,40 @@ function solve_qp_with_projected_newton(H, g, lower, upper;
         result = 1
     end
 
+    msgs = Dict([(-1, "Hessian is not positive definite"),
+                (0, "No descent direction found"),
+                (1, "Maximum main iterations exceeded"),
+                (2, "Maximum line-search iterations exceeded"),
+                (3, "No bounds, returning Newton point"),
+                (4, "Improvement smaller than tolerance"),
+                (5, "Gradient norm smaller than tolerance"),
+                (6, "All dimensions are clamped")
+                ])
 
-    # results = { 'Hessian is not positive definite',...          % result = -1
-            # 'No descent direction found',...                % result = 0    SHOULD NOT OCCUR
-            # 'Maximum main iterations exceeded',...          % result = 1
-            # 'Maximum line-search iterations exceeded',...   % result = 2
-            # 'No bounds, returning Newton point',...         % result = 3
-            # 'Improvement smaller than tolerance',...        % result = 4
-            # 'Gradient norm smaller than tolerance',...      % result = 5
-            # 'All dimensions are clamped'};                  % result = 6
+    status = Dict([ ("objectives", value[1]),
+                    ("residuals", gnorm),
+                    # ("free", free),
+                    ("iter", niter),
+                    ("result", msgs[result]),
+                  ])
+
+    if result>=3
+        status["optimal"] = true # optimization succeeded
+    else
+        status["optimal"] = false # optimization failed
+    end
+
     if verbose
         println("RESULT:", result, " iterations:", niter, " gradient:", gnorm, " final cost:", value[1], " factorization:", nfactor)
     end
 
-	return x, Dict([ ("objectives", value[1]), ("residuals", gnorm)])
+	return x, status
 end
 
 
-function clamp(x,upper,lower) 
+function clamping(x,upper,lower) 
     minl = [minimum([ui, xi]) for (ui, xi) in zip(upper,x)]
-    clamped = [maximum([li, xi]) for (li,xi) in zip(lower, minl)]
-    return clamped
+    return [maximum([li, xi]) for (li,xi) in zip(lower, minl)]
 end
 
 
@@ -190,7 +199,7 @@ function main()
     println(PROGRAM_FILE," start!!")
 
     n 		= 5
-    g 		= randn(n,1)
+    g 		= randn(n)
     println("g:")
     display(g)
     println("")
@@ -199,19 +208,55 @@ function main()
     println("H:")
     display(H)
     println("")
-    lower 	= -ones(n,1)
+    lower 	= -ones(n)
+    lower[3] = -Inf
     println("lower",lower)
-    upper 	=  ones(n,1)
+    display(lower)
+    upper 	=  ones(n)
+    upper[1] = Inf
     println("upper",upper)
 
-    xstar, status = solve_qp_with_projected_newton(H, g, lower, upper, verbose=true)
+    @time xstar, status = solve_qp_with_projected_newton(H, g, lower, upper)
+    print(status)
     println(xstar)
 
     println(PROGRAM_FILE," Done!!")
 end
 
+
+function main2()
+    println(PROGRAM_FILE," start!!")
+
+    n 		= 3
+    q = [3.0;4.0;-5.0]
+    println("q:")
+    display(q)
+    println("")
+    A = [1.0 0.0 -2.0;
+         1.0 2.0 0.0;
+         0.0 0.0 3.0]
+    A = A*A'
+    println("A:")
+    display(A)
+    println("")
+    xmin = [-3.0;-5.0;-2.0]
+    display(xmin)
+    xmax = [1.0;1.0;1.0] 
+    println("lower",xmin)
+    println("upper",xmax)
+
+    xstar, status = solve_qp_with_projected_newton(A, q, xmin, xmax, verbose=true)
+    println(xstar)
+    print(status)
+
+    println(PROGRAM_FILE," Done!!")
+end
+
+
+
 if __MAIN__
-    @time main()
+    # @time main()
+    @time main2()
 end
 
 
