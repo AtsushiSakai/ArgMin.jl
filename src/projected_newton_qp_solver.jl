@@ -15,35 +15,37 @@ const __MAIN__ = length(PROGRAM_FILE)!=0 && occursin(PROGRAM_FILE, @__FILE__)
 
 export solve_qp_with_projected_newton
 
+"""
+    Solve quadratic programming with projected newton method
+
+    argmin(0.5*x'*H*x + x'*g)
+    s.t. lower<=x<=upper
+
+    inputs:
+        H - positive definite matrix   (n * n)
+        g - a vector                   (n)
+        lower - lower bounds           (n)
+        upper - upper bounds           (n)
+
+    optional inputs:
+        x0       - initial state       (n)
+        maxIter        = 100       maximum number of iterations
+        minGrad        = 1e-8      minimum norm of non-fixed gradient
+        minRelImprove  = 1e-8      minimum relative improvement
+        stepDec        = 0.6      factor for decreasing stepsize
+        minStep        = 1e-22    minimal stepsize for linesearch
+        Armijo         = 0.1      Armijo parameter
+        verbose        = false    verbosity
+
+    outputs:
+        xstar    - solution            (n)
+        status   - status dictionary
+"""
 function solve_qp_with_projected_newton(H, g, lower, upper;
            maxIter = 100, minGrad = 1e-8, minRelImprove = 1e-8,
            stepDec = 0.6, minStep = 1e-22, Armijo = 0.1, verbose = false 
            )
-    """
-        argmin(0.5*x'*H*x + x'*g)
-        s.t. lower<=x<=upper
-
-        inputs:
-            H - positive definite matrix   (n * n)
-            g - a vector                   (n)
-            lower - lower bounds           (n)
-            upper - upper bounds           (n)
-
-        optional inputs:
-            x0       - initial state       (n)
-            maxIter        = 100       maximum number of iterations
-            minGrad        = 1e-8      minimum norm of non-fixed gradient
-            minRelImprove  = 1e-8      minimum relative improvement
-            stepDec        = 0.6      factor for decreasing stepsize
-            minStep        = 1e-22    minimal stepsize for linesearch
-            Armijo         = 0.1      Armijo parameter
-	        verbose        = false    verbosity
-
-        outputs:
-            xstar    - solution            (n)
-            status   - status dictionary
-    """
-
+    
     n        = size(H,1)
     clamped  = falses(n,1)
     free     = trues(n,1)
