@@ -4,7 +4,7 @@
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://AtsushiSakai.github.io/argmin.jl/dev)
 [![Build Status](https://github.com/AtsushiSakai/argmin.jl/workflows/CI/badge.svg)](https://github.com/AtsushiSakai/argmin.jl/actions)
 
-A numerical solver by pure Julia
+A numerical solvers written by pure Julia.
 
 Mathematical equations are rendered by [Online LaTeX Equation Editor](https://www.codecogs.com/latex/eqneditor.php)
 
