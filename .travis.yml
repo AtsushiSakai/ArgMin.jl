@@ -1,6 +1,0 @@
-language: julia
-julia:
-  - 1.0.1
-script:
-  - julia --version
-  - julia ./test/runtests.jl
