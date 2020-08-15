@@ -1,5 +1,8 @@
 # argmin.jl
 [![Build Status](https://travis-ci.org/AtsushiSakai/argmin.jl.svg?branch=master)](https://travis-ci.org/AtsushiSakai/argmin.jl)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://AtsushiSakai.github.io/argmin.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://AtsushiSakai.github.io/argmin.jl/dev)
+[![Build Status](https://github.com/AtsushiSakai/argmin.jl/workflows/CI/badge.svg)](https://github.com/AtsushiSakai/argmin.jl/actions)
 
 A numerical solver by pure Julia
 
