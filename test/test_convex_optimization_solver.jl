@@ -5,6 +5,7 @@
 #
 
 using Test
+using ArgMin
 
 function test_solve_linear_programming_with_simplex_method1()
     println("test_solve_linear_programming_with_simplex_method1")
@@ -17,7 +18,7 @@ function test_solve_linear_programming_with_simplex_method1()
 
 	h = [14.0 8.0 18.0]'
 
-	x_hat, status = argmin.solve_linear_programming_with_simplex_method(
+	x_hat, status = solve_linear_programming_with_simplex_method(
 			c, G=G, h=h)
 	# display(x_hat)
 	@test x_hat[1] ≈ 2.0 atol=0.01
@@ -43,7 +44,7 @@ function test_solve_linear_programming_with_simplex_method2()
 	# display(b)
 	# println("")
 
-	x_hat, status = argmin.solve_linear_programming_with_simplex_method(
+	x_hat, status = solve_linear_programming_with_simplex_method(
 			c, G=G, h=h)
 	# display(x_hat)
 	@test x_hat[1] ≈ 2.0 atol=0.01
@@ -76,7 +77,7 @@ function test_solve_linear_programming_with_simplex_method3()
 
     b = [100]
 
-	x_hat, status = argmin.solve_linear_programming_with_simplex_method(
+	x_hat, status = solve_linear_programming_with_simplex_method(
 			c, G=G, h=h, A=A, b=b)
 
     display(x_hat)
@@ -97,7 +98,7 @@ function test_solve_quadratic_programming1()
 	# display(P)
 	q = [3.0,4.0]'
 
-	x_hat = argmin.solve_quadratic_programming(P, q)
+	x_hat = solve_quadratic_programming(P, q)
 	# display(x_hat)
 	@test x_hat[1] ≈ -3.0 atol=0.01
 	@test x_hat[2] ≈ -2.0 atol=0.01
@@ -116,7 +117,7 @@ function test_solve_quadratic_programming2()
 	b = [1.0]
 	# display(b)
 
-	x_hat = argmin.solve_quadratic_programming(P, q, A, b)
+	x_hat = solve_quadratic_programming(P, q, A, b)
 	# display(x_hat)
 	@test x_hat[1] ≈ 1.0 atol=0.01
 	@test x_hat[2] ≈ 0.0 atol=0.01

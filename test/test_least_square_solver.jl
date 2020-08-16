@@ -4,6 +4,8 @@
 # author: Atsushi Sakai
 #
 
+using ArgMin
+
 # ====Least square ====
 
 function test_least_square()
@@ -20,7 +22,7 @@ function test_least_square()
 		 1.29  0.12  0.62];
 	m, n = size(A)
 	b = 1e3 * ones(m);
-	xhat = argmin.solve_least_square(A, b)
+	xhat = solve_least_square(A, b)
 	# println(xhat)
 
 	@test xhat[1] ≈ 62.0766 atol=0.01
@@ -36,7 +38,7 @@ function test_multi_objective_least_square()
    		  [5.0, 2.0, 8.0, -4.0, 1.0, 0.6, 17.0, 21.0, -9.0, -1.0]];
 	lambdas = [0.1, 1.0]
 
-	xhat = argmin.solve_multi_objective_least_square(As, bs, lambdas)
+	xhat = solve_multi_objective_least_square(As, bs, lambdas)
 
 	@test xhat[1] ≈ 0.405977 atol=0.01
 end
@@ -48,7 +50,7 @@ function test_solve_constrained_least_square()
 	b = randn(10)
 	C = randn(2,5)
 	d = randn(2)
-	xhat = argmin.solve_least_square(A,b,C,d);
+	xhat = solve_least_square(A,b,C,d);
 end
 
 
@@ -58,7 +60,7 @@ function test_solve_nonlinear_least_square_with_newton_raphson()
 	f(x) = (exp(x)-exp(-x)) / (exp(x)+exp(-x))
 	Df(x) = 4.0 / (exp(x) + exp(-x))^2;
 
-	xhat = argmin.solve_nonlinear_least_square_with_newton_raphson(f,Df,0.95)
+	xhat = solve_nonlinear_least_square_with_newton_raphson(f,Df,0.95)
 end
 
 
@@ -66,14 +68,14 @@ function test_solve_nonlinear_least_square_with_gauss_newton()
 	println("test_solve_nonlinear_least_square_with_gauss_newton")
 	f(x) = (exp.(x) - exp.(-x)) ./ (exp.(x) + exp.(-x))
 	Df(x) = 4 ./ (exp.(x) + exp.(-x)).^2
-	xhat = argmin.solve_nonlinear_least_square_with_gauss_newton(f,Df,[1.15])
+	xhat = solve_nonlinear_least_square_with_gauss_newton(f,Df,[1.15])
 end
 
 function test_solve_nonlinear_least_square_with_levenberg_marquardt()
 	println("test_solve_nonlinear_least_square_with_levenberg_marquardt")
 	f(x) = (exp.(x) - exp.(-x)) ./ (exp.(x) + exp.(-x))
 	Df(x) = 4.0 ./ (exp.(x) + exp.(-x)).^2
-	xhat = argmin.solve_nonlinear_least_square_with_levenberg_marquardt(f,Df,[0.95], 1.0)
+	xhat = solve_nonlinear_least_square_with_levenberg_marquardt(f,Df,[0.95], 1.0)
 end
 
 function test_solve_constrained_nonlinear_least_square_with_augmented_lagragian()
@@ -83,7 +85,7 @@ function test_solve_constrained_nonlinear_least_square_with_augmented_lagragian(
   			2*x[1]  2 ]
 	g(x) = [ x[1] + x[1]^3 + x[2] + x[2]^2 ]
 	Dg(x) = [ 1 + 3*x[1]^2  1 + 2*x[2] ]
-	x, z, hist = argmin.solve_constrained_nonlinear_least_square_with_augmented_lagragian(f, Df, g, Dg, [0.5, -0.5], 1.0)
+	x, z, hist = solve_constrained_nonlinear_least_square_with_augmented_lagragian(f, Df, g, Dg, [0.5, -0.5], 1.0)
 end
 
 

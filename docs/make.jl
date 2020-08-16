@@ -1,8 +1,8 @@
-using argmin
+using ArgMin
 using Documenter
 
 makedocs(;
-    modules=[argmin],
+    modules=[ArgMin],
     authors="Atsushi Sakai <asakai.amsl+github@gmail.com> and contributors",
     repo="https://github.com/AtsushiSakai/ArgMin.jl/blob/{commit}{path}#L{line}",
     sitename="ArgMin.jl",

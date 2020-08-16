@@ -4,6 +4,7 @@
  author: Atsushi Sakai
 "
 
+using ArgMin
 using Test
 
 function test_solve_qp_with_projected_newton1()
@@ -15,7 +16,7 @@ function test_solve_qp_with_projected_newton1()
     lower 	= -ones(n)
     upper 	=  ones(n)
 
-    xstar, status = argmin.solve_qp_with_projected_newton(
+    xstar, status = solve_qp_with_projected_newton(
                                  H, g, lower, upper)
 
     @test status["optimal"] == true
@@ -32,7 +33,7 @@ function test_solve_qp_with_projected_newton2()
     xmin = [-3.0;-5.0;-2.0]
     xmax = [1.0;1.0;1.0] 
 
-    xstar, status = argmin.solve_qp_with_projected_newton(
+    xstar, status = solve_qp_with_projected_newton(
                                  A, q, xmin, xmax)
     @test xstar[1] ≈ 0.791667 atol=0.01
     @test xstar[2] ≈ -0.958333 atol=0.01

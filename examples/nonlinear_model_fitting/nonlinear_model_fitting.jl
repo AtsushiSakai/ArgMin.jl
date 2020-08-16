@@ -4,10 +4,8 @@
 # author: Atsushi Sakai
 #
 
-include("../../argmin.jl")
-
 using PyPlot
-using argmin
+using ArgMin
 
 
 function calc_y(theta, x)
