@@ -1,12 +1,12 @@
 ```@meta
-CurrentModule = argmin
+CurrentModule = ArgMin
 ```
 
-# argmin
+# ArgMin
 
 ```@index
 ```
 
 ```@autodocs
-Modules = [argmin]
+Modules = [ArgMin]
 ```

@@ -1,10 +1,9 @@
 """
+    Optimization solver written by pure Julia 
 
- Optimization solver written by pure Julia 
-
- author: Atsushi Sakai
+    author: Atsushi Sakai
 """
-module argmin
+module ArgMin
 
 using LinearAlgebra
 

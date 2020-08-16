@@ -1,7 +1,7 @@
-# argmin.jl
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://AtsushiSakai.github.io/argmin.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://AtsushiSakai.github.io/argmin.jl/dev)
-[![Build Status](https://github.com/AtsushiSakai/argmin.jl/workflows/CI/badge.svg)](https://github.com/AtsushiSakai/argmin.jl/actions)
+# ArgMin.jl
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://AtsushiSakai.github.io/ArgMin.jl/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://AtsushiSakai.github.io/ArgMin.jl/dev)
+[![Build Status](https://github.com/AtsushiSakai/ArgMin.jl/workflows/CI/badge.svg)](https://github.com/AtsushiSakai/ArgMin.jl/actions)
 
 A numerical solvers written by pure Julia.
 

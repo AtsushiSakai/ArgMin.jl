@@ -4,11 +4,11 @@ using Documenter
 makedocs(;
     modules=[argmin],
     authors="Atsushi Sakai <asakai.amsl+github@gmail.com> and contributors",
-    repo="https://github.com/AtsushiSakai/argmin.jl/blob/{commit}{path}#L{line}",
-    sitename="argmin.jl",
+    repo="https://github.com/AtsushiSakai/ArgMin.jl/blob/{commit}{path}#L{line}",
+    sitename="ArgMin.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://AtsushiSakai.github.io/argmin.jl",
+        canonical="https://AtsushiSakai.github.io/ArgMin.jl",
         assets=String[],
     ),
     pages=[
@@ -17,5 +17,5 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/AtsushiSakai/argmin.jl",
+    repo="github.com/AtsushiSakai/ArgMin.jl",
 )

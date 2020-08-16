@@ -1,4 +1,4 @@
-name = "argmin"
+name = "ArgMin"
 uuid = "2b6b944d-d7f5-4169-9d33-5953e7049e7a"
 authors = ["Atsushi Sakai <asakai.amsl+github@gmail.com> and contributors"]
 version = "0.1.0"
